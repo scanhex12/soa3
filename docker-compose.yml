@@ -1,0 +1,43 @@
+services:
+    database:
+        build: 
+            context: database
+        ports:
+            - 8095:8095
+        networks:
+            - default
+
+    grpc_server:
+        build:
+            context: grpc_server
+        ports:
+            - 8096:8096
+        depends_on:
+            - posts_database
+        networks:
+            - default
+
+    posts_database:
+        build:
+            context: posts_database
+        ports:
+            - 8097:8097
+        networks:
+            - default
+
+
+    server:
+        build: 
+            context: http_server
+        ports:
+            - 8094:8094
+        depends_on:
+            - grpc_server
+            - database
+        networks:
+            - default
+
+networks:
+    default:
+        driver: bridge
+

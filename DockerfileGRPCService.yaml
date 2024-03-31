@@ -1,0 +1,12 @@
+FROM python:3.9-slim
+
+RUN pip install grpcio grpcio-tools
+
+WORKDIR /app
+COPY . /app
+
+RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. posts.proto
+
+EXPOSE 8911
+
+CMD ["python", "grpc_server.py"]
