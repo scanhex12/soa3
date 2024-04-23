@@ -1,0 +1,101 @@
+paths:
+  /posts:
+    post:
+      summary: Post creation
+      security:
+        - JWTAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        '200':
+          description: Post created
+
+  /posts/{postId}:
+    put:
+      summary: Post update
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: ID поста
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        '200':
+          description: Post updated
+
+    delete:
+      summary: Post delete
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: ID post
+      responses:
+        '200':
+          description: Post deleted
+
+  /posts/{postId}:
+    get:
+      summary: Get post by id
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: ID поста
+      responses:
+        '200':
+          description: Post getted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
+  /posts:
+    get:
+      summary: Get posts range from page to page + page_size
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+          description: start post
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Posts count
+      responses:
+        '200':
+          description: Posts getted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"

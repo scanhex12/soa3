@@ -1,0 +1,10 @@
+FROM python:3.9-slim
+
+RUN python3 -m pip install flask requests
+
+WORKDIR /app
+COPY . /app
+
+EXPOSE 4567
+
+CMD ["python3", "http_server.py"]

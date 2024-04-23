@@ -1,0 +1,2 @@
+from posts_pb2 import posts_pb2
+from posts_pb2_grpc import posts_pb2_grpc
