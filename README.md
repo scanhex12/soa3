@@ -1,2 +1,2 @@
 # soa3
-Posts service
+Posts service with auth
