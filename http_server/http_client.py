@@ -18,13 +18,25 @@ def create_user():
     response = requests.post(f'{base_url}/signup', json=data)
     print(response)
 
+def create_user2():
+    data = {
+        "login" : "test_user1",
+        "password" : "5612347",
+        'firstName': 'firstName',
+        'lastName': 'lastName',
+        'birthDate': 'birthDate',
+        'mail': 'mail',
+        'phoneNumber': 'phoneNumber'
+    }
+    response = requests.post(f'{base_url}/signup', json=data)
+    print(response)
+
 def create_post():
     data = {
         "login" : "test_user",
         "password" : "5612347",
         'title': 'post_title',
         'content': 'post_content',
-        'user_id': 'user123'
     }
     response = requests.post(f'{base_url}/posts', json=data)
     print(response)
@@ -36,18 +48,17 @@ def update_post(post_id):
         "password" : "5612347",
         'title': 'new_post_title',
         'content': 'new_post_content',
-        'user_id': 'user123'
     }
     response = requests.put(f'{base_url}/posts/{post_id}', json=data)
     print(response)
 
 def delete_post(post_id):
     data = {
-        "login" : "test_user",
+        "login" : "test_user1",
         "password" : "5612347",
     }
     response = requests.delete(f'{base_url}/posts/{post_id}', json=data)
-    print(response.json())
+    print(response)
 
 def get_post(post_id):
     data = {
@@ -71,6 +82,7 @@ def get_posts(page=1, page_size=1):
 if __name__ == '__main__':
     create_user()
 
+    create_user2()
     post_id = create_post()
 
     get_posts(post_id)

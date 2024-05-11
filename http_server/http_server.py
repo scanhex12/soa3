@@ -113,7 +113,7 @@ def create_post():
     response = stub.CreatePost(posts_pb2.CreatePostRequest(
         title=data['title'],
         content=data['content'],
-        user_id=data['user_id']
+        user_id=login
     ))
     return jsonify({'message': 'Post created', 'post': {'id': response.id}})
 
@@ -130,11 +130,18 @@ def update_post(post_id):
     if stored_password != password:
         return make_response('Incorrect password\n', 403)
 
+    response = stub.GetPost(posts_pb2.GetPostRequest(
+        id=post_id
+    ))
+
+    if response.user_id != login:
+        return make_response('Access denied\n', 403)
+
     response = stub.UpdatePost(posts_pb2.UpdatePostRequest(
         id=post_id,
         title=data['title'],
         content=data['content'],
-        user_id=data['user_id']
+        user_id=login
     ))
     return jsonify({'message': 'Post updated'})
 
@@ -150,6 +157,13 @@ def delete_post(post_id):
         
     if stored_password != password:
         return make_response('Incorrect password\n', 403)
+
+    response = stub.GetPost(posts_pb2.GetPostRequest(
+        id=post_id
+    ))
+
+    if response.user_id != login:
+        return make_response('Access denied\n', 403)
 
     response = stub.DeletePost(posts_pb2.DeletePostRequest(
         id=post_id
@@ -172,6 +186,10 @@ def get_post(post_id):
     response = stub.GetPost(posts_pb2.GetPostRequest(
         id=post_id
     ))
+
+    if response.user_id != login:
+        return make_response('Access denied\n', 403)
+
     return jsonify({'post': {'id': response.id, 'title': response.title, 'content': response.content, 'user_id': response.user_id}})
 
 @app.route('/posts', methods=['GET'])
@@ -194,6 +212,8 @@ def get_posts():
     posts = []
     print("posts ", page, page_size)
     for response in stub.GetPosts(posts_pb2.GetPostsRequest(page=int(page), page_size=int(page_size))):
+        if response.user_id != login:
+            return make_response('Access denied\n', 403)
         posts.append({'id': response.id, 'title': response.title, 'content': response.content, 'user_id': response.user_id})
     return jsonify({'posts': posts})
 
